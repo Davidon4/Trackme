@@ -30,6 +30,9 @@ export async function signInWithOAuth(e: React.FormEvent<HTMLButtonElement>) {
   e.preventDefault();
   const provider = 'google';
   const supabase = createClient();
+  
+  console.log('Starting OAuth flow...');
+  console.log('Redirect URL:', `${window.location.origin}/api/auth/v1/callback`);
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: provider as Provider,
@@ -43,10 +46,11 @@ export async function signInWithOAuth(e: React.FormEvent<HTMLButtonElement>) {
   });
 
   if (error) {
-    console.error('Error signing in with OAuth:', error);
+    console.error('OAuth error:', error);
     throw error;
   }
 
+  console.log('OAuth response data:', data);
   return data;
 }
 

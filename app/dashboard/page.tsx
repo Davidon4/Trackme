@@ -1,9 +1,26 @@
+"use client";
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle, Zap } from "lucide-react"
-import Link from "next/link"
+import Link from "next/link";
+import {useRouter} from "next/navigation";
+import {createClient} from "@/utils/supabase/client";
 
 export default function DashboardPage() {
+    const router = useRouter()
+  
+  const handleSignOut = async () => {
+    const supabase = createClient()
+    const { error } = await supabase.auth.signOut()
+    
+    if (error) {
+      console.error('Error signing out:', error)
+    } else {
+      router.push('/signup')
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b">
@@ -12,7 +29,7 @@ export default function DashboardPage() {
             <Zap className="h-6 w-6 text-primary" />
             <span className="ml-2 text-lg font-bold">NextGen</span>
           </Link>
-          <Button variant="outline">Sign Out</Button>
+          <Button variant="outline" onClick={handleSignOut}>Sign Out</Button>
         </div>
       </header>
 

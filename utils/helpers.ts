@@ -43,31 +43,26 @@ const toastKeyMap: { [key: string]: string[] } = {
   error: ['error', 'error_description']
 };
 
-const getToastRedirect = (
+export const getToastRedirect = (
   path: string,
-  toastType: string,
-  toastName: string,
-  toastDescription: string = '',
+  type: 'error' | 'success' | 'status',
+  title: string,
+  description: string = '',
   disableButton: boolean = false,
   arbitraryParams: string = ''
-): string => {
-  const [nameKey, descriptionKey] = toastKeyMap[toastType];
-
-  let redirectPath = `${path}?${nameKey}=${encodeURIComponent(toastName)}`;
-
-  if (toastDescription) {
-    redirectPath += `&${descriptionKey}=${encodeURIComponent(toastDescription)}`;
-  }
-
-  if (disableButton) {
-    redirectPath += `&disable_button=true`;
-  }
-
-  if (arbitraryParams) {
-    redirectPath += `&${arbitraryParams}`;
-  }
-
-  return redirectPath;
+) => {
+  const baseUrl = typeof window !== 'undefined' 
+    ? window.location.origin 
+    : process.env.NEXT_PUBLIC_BASE_URL;
+    
+  return new URL(
+    `${path}?${type}=${encodeURIComponent(title)}${
+      description ? `&${type}_description=${encodeURIComponent(description)}` : ''
+    }${disableButton ? '&disable_button=true' : ''}${
+      arbitraryParams ? `&${arbitraryParams}` : ''
+    }`,
+    baseUrl
+  ).toString();
 };
 
 export const getStatusRedirect = (
