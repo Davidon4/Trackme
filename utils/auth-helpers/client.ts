@@ -32,12 +32,12 @@ export async function signInWithOAuth(e: React.FormEvent<HTMLButtonElement>) {
   const supabase = createClient();
   
   console.log('Starting OAuth flow...');
-  console.log('Redirect URL:', `${window.location.origin}/api/auth/v1/callback`);
+  console.log('Redirect URL:', `${window.location.origin}/auth/v1/callback`);
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: provider as Provider,
     options: {
-      redirectTo: `${window.location.origin}/api/auth/v1/callback`,
+      redirectTo: `${window.location.origin}/auth/v1/callback`,
       queryParams: {
         access_type: 'offline',
         prompt: 'consent',

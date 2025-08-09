@@ -51,9 +51,9 @@ export const getToastRedirect = (
   disableButton: boolean = false,
   arbitraryParams: string = ''
 ) => {
-  const baseUrl = typeof window !== 'undefined' 
-    ? window.location.origin 
-    : process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = typeof window !== 'undefined'
+    ? window.location.origin
+    : getURL();
     
   return new URL(
     `${path}?${type}=${encodeURIComponent(title)}${

@@ -1,8 +1,14 @@
 import { SignupForm } from "@/components/signup-form"
+import { signUp, redirectToPath } from "@/utils/auth-helpers/server"
 import Link from "next/link"
 import { Zap } from "lucide-react"
 
 export default function SignupPage() {
+  async function handleSignUp(formData: FormData) {
+    'use server'
+    const path = await signUp(formData)
+    return redirectToPath(path)
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
       <div className="w-full max-w-md">
@@ -15,7 +21,7 @@ export default function SignupPage() {
           <p className="text-muted-foreground mt-2">Join thousands of developers building amazing products</p>
         </div>
 
-        <SignupForm />
+        <SignupForm onSignUp={handleSignUp} />
 
         <div className="text-center mt-6">
           <p className="text-sm text-muted-foreground">

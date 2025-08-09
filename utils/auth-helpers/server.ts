@@ -28,7 +28,6 @@ export async function signOut() {
   return '/signin';
 }
 
-
 export async function signUp(formData: FormData) {
   const email = String(formData.get('email')).trim();
   const password = String(formData.get('password')).trim();

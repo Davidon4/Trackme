@@ -1,14 +1,15 @@
 import { NextResponse } from 'next/server';
 import { createClient } from "@/utils/supabase/server";
-import { getErrorRedirect, getStatusRedirect } from '@/utils/helpers';
 
 export async function GET(request: Request) {
   const baseUrl = new URL(request.url).origin;
   console.log('Callback route hit');
+  console.log('Incoming request.url:', request.url);
   
   try {
     const requestUrl = new URL(request.url);
     const code = requestUrl.searchParams.get('code');
+    console.log('Parsed code from callback URL:', code);
     
     if (!code) {
       return NextResponse.redirect(
@@ -21,15 +22,19 @@ export async function GET(request: Request) {
     // Exchange the code for a session
     const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
     if (exchangeError) {
+      console.error('exchangeCodeForSession error:', exchangeError);
       throw exchangeError;
     }
+    console.log('exchangeCodeForSession succeeded');
 
     // Get the user data
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     
     if (userError || !user) {
+      console.error('getUser error or no user:', userError);
       throw userError || new Error('User not found');
     }
+    console.log('getUser succeeded:', { id: user.id, email: user.email });
 
     // Check if user exists in the database
     const { data: existingUser, error: checkError } = await supabase
@@ -39,8 +44,10 @@ export async function GET(request: Request) {
       .single();
 
     if (checkError && checkError.code !== 'PGRST116') {
+      console.error('Error checking existing user:', checkError);
       throw checkError;
     }
+    console.log('Existing user check:', existingUser ? 'found' : 'not found');
 
     // If user doesn't exist, create them
     if (!existingUser) {
@@ -55,14 +62,19 @@ export async function GET(request: Request) {
         });
 
       if (insertError) {
+        console.error('Error inserting new user:', insertError);
         throw insertError;
       }
+      console.log('Inserted new user row');
     }
 
     return NextResponse.redirect(new URL('/dashboard', baseUrl));
 
   } catch (error) {
     console.error('Callback route error:', error);
+    if (error instanceof Error && error.stack) {
+      console.error('Stack:', error.stack);
+    }
     return NextResponse.redirect(
       new URL(`/login?error=Authentication failed&error_description=${
         error instanceof Error ? error.message : 'Unknown error'

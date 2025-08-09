@@ -9,7 +9,11 @@ import { Separator } from "@/components/ui/separator"
 import { Eye, EyeOff, Mail, User, Lock } from "lucide-react"
 import {signInWithOAuth} from "@/utils/auth-helpers/client"
 
-export function SignupForm() {
+type SignupFormProps = {
+  onSignUp: (formData: FormData) => Promise<void>;
+}
+
+export function SignupForm({ onSignUp }: SignupFormProps) {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -75,7 +79,7 @@ export function SignupForm() {
 
 
         {/* Signup Form */}
-        <form className="space-y-4">
+        <form className="space-y-4" action={onSignUp}>
           <div className="space-y-2">
             <Label htmlFor="name">Full Name</Label>
             <div className="relative">
