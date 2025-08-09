@@ -8,13 +8,14 @@ import { redirectToPath } from "@/utils/auth-helpers/server";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 
-export default function EmailConfirmationPage({
-  searchParams,
-}: {
-  params?: Record<string, string>;
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
-  const sp = searchParams ?? {};
+type EmailConfirmationPageProps = {
+  params: Record<string, string>;
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export default function EmailConfirmationPage({ searchParams }: EmailConfirmationPageProps) {
+  const sp = searchParams || {};
+  
   async function resendVerification(formData: FormData) {
     'use server'
     const email = String(formData.get('email') || '').trim();
@@ -86,7 +87,7 @@ export default function EmailConfirmationPage({
 
             <form className="space-y-4" action={resendVerification}>
               <div className="space-y-2">
-                <Label htmlFor="email">Didn’t receive an email? Resend it</Label>
+                <Label htmlFor="email">Didn&apos;t receive an email? Resend it</Label>
                 <Input id="email" name="email" type="email" placeholder="you@example.com" required />
               </div>
               <Button type="submit" className="w-full">Resend confirmation email</Button>
@@ -106,4 +107,3 @@ export default function EmailConfirmationPage({
     </div>
   );
 }
-
