@@ -9,12 +9,13 @@ import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 
 type EmailConfirmationPageProps = {
-  params: Record<string, string>;
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<Record<string, string>>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export default function EmailConfirmationPage({ searchParams }: EmailConfirmationPageProps) {
-  const sp = searchParams || {};
+export default async function EmailConfirmationPage({ searchParams }: EmailConfirmationPageProps) {
+  const resolvedSearchParams = await searchParams;
+  const sp = resolvedSearchParams || {};
   
   async function resendVerification(formData: FormData) {
     'use server'
