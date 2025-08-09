@@ -45,7 +45,7 @@ export default function LandingPage() {
                     Build Amazing Products with NextGen
                   </h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    The complete platform for modern development. Ship faster, scale better, and delight your users with
+                    The complete platform for modern development. Ship faster, scale better and delight your users with
                     our cutting-edge tools and infrastructure.
                   </p>
                 </div>
@@ -198,8 +198,8 @@ export default function LandingPage() {
                     ))}
                   </div>
                   <CardDescription>
-                    "NextGen has completely transformed how we build and deploy our applications. The developer
-                    experience is unmatched."
+                  &quot;NextGen has completely transformed how we build and deploy our applications. The developer
+                    experience is unmatched.&quot;
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -226,8 +226,8 @@ export default function LandingPage() {
                     ))}
                   </div>
                   <CardDescription>
-                    "The performance improvements we've seen since switching to NextGen are incredible. Our users love
-                    the speed."
+                  &quot;The performance improvements we&apos;ve seen since switching to NextGen are incredible. Our users love
+                    the speed.&quot;
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -254,8 +254,8 @@ export default function LandingPage() {
                     ))}
                   </div>
                   <CardDescription>
-                    "NextGen's security features give us peace of mind. We can focus on building great products instead
-                    of worrying about infrastructure."
+                  &quot;NextGen&apos;s security features give us peace of mind. We can focus on building great products instead
+                    of worrying about infrastructure.&quot;
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

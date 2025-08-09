@@ -42,12 +42,12 @@ export default function DashboardPage() {
               </div>
               <CardTitle className="text-2xl">Welcome to NextGen!</CardTitle>
               <CardDescription>
-                Your account has been created successfully. You're now ready to start building amazing products.
+                Your account has been created successfully. You&apos;re now ready to start building amazing products.
               </CardDescription>
             </CardHeader>
             <CardContent className="text-center space-y-4">
               <p className="text-muted-foreground">
-                This is your dashboard where you can manage your projects, view analytics, and access all NextGen
+                This is your dashboard where you can manage your projects, view analytics and access all NextGen
                 features.
               </p>
               <div className="flex gap-4 justify-center">
