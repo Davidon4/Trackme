@@ -1,7 +1,11 @@
 export const getURL = (path: string = '') => {
     // In production, always use NEXT_PUBLIC_SITE_URL
     if (process.env.NODE_ENV === 'production') {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.launchping.com';
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
+        || process.env.NEXT_PUBLIC_APP_URL
+        || process.env.NEXT_PUBLIC_VERCEL_URL
+        || process.env.VERCEL_URL
+        || 'http://localhost:3000';
       // Clean the base URL
       const cleanUrl = baseUrl
         .replace(/\/+$/, '')        // Remove trailing slashes
@@ -9,7 +13,9 @@ export const getURL = (path: string = '') => {
         .replace(/([^:]\/)\/+/g, '$1'); // Remove duplicate slashes
 
       // Ensure the URL has https:// if not already present
-      const finalUrl = cleanUrl.startsWith('http') ? cleanUrl : `https://${cleanUrl}`;
+      const finalUrl = cleanUrl.includes('http') || cleanUrl.includes('localhost')
+        ? cleanUrl
+        : `https://${cleanUrl}`;
       
       // Clean the path
       const cleanPath = path.replace(/^\/+/, ''); // Remove leading slashes
