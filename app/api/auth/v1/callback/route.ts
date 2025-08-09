@@ -3,7 +3,7 @@ import { createClient } from "@/utils/supabase/server";
 import { getErrorRedirect, getStatusRedirect } from '@/utils/helpers';
 
 export async function GET(request: Request) {
-  const {searchParams, origin} = new URL(request.url);
+  const {searchParams} = new URL(request.url);
   const code = searchParams.get('code');
 
   if (!code) {
@@ -26,38 +26,9 @@ export async function GET(request: Request) {
       return NextResponse.redirect(getErrorRedirect('/error', 'User not found'));
     }
 
-    // Check if user exists in the database
-    const { data: existingUser } = await supabase
-      .from('users')
-      .select('id, role')
-      .eq('id', user.id)
-      .single();
-
-    if (existingUser) {
-      return NextResponse.redirect(getStatusRedirect('/dashboard', 'Welcome back!'));
-    }
-
-    // Create new user record
-    const { error: createError } = await supabase
-      .from('users')
-      .insert({
-        id: user.id,
-        email: user.email,
-        full_name: user.user_metadata?.full_name || '',
-        role: 'user',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      })
-      .single();
-
-    if (createError) {
-      return NextResponse.redirect(getErrorRedirect('/error', 'Failed to create user profile'));
-    }
-
-    return NextResponse.redirect(getStatusRedirect('/dashboard', 'Account created successfully!'));
-
+    return NextResponse.redirect(getStatusRedirect('/dashboard', 'Successfully signed in!'));
   } catch (error) {
-    console.error('Auth error:', error);
-    return NextResponse.redirect(getErrorRedirect('/error', 'Unexpected error during sign in'));
+    console.error('Auth callback error:', error);
+    return NextResponse.redirect(getErrorRedirect('/error', 'Authentication failed'));
   }
 }
