@@ -8,11 +8,13 @@ import { redirectToPath } from "@/utils/auth-helpers/server";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 
-type PageProps = {
+export default function EmailConfirmationPage({
+  searchParams,
+}: {
+  params?: Record<string, string>;
   searchParams?: { [key: string]: string | string[] | undefined };
-};
-
-export default function EmailConfirmationPage({ searchParams = {} }: PageProps) {
+}) {
+  const sp = searchParams ?? {};
   async function resendVerification(formData: FormData) {
     'use server'
     const email = String(formData.get('email') || '').trim();
@@ -48,10 +50,10 @@ export default function EmailConfirmationPage({ searchParams = {} }: PageProps) 
     );
   }
 
-  const status = (searchParams.status as string) || '';
-  const statusDescription = (searchParams.status_description as string) || '';
-  const error = (searchParams.error as string) || '';
-  const errorDescription = (searchParams.error_description as string) || '';
+  const status = (sp.status as string) || '';
+  const statusDescription = (sp.status_description as string) || '';
+  const error = (sp.error as string) || '';
+  const errorDescription = (sp.error_description as string) || '';
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
