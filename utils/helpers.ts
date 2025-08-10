@@ -1,7 +1,7 @@
 export const getURL = (path: string = '') => {
     // In production, always use NEXT_PUBLIC_SITE_URL
     if (process.env.NODE_ENV === 'production') {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://trackme-phi.vercel.app"
         || process.env.NEXT_PUBLIC_APP_URL
         || process.env.NEXT_PUBLIC_VERCEL_URL
         || process.env.VERCEL_URL
