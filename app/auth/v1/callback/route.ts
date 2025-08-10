@@ -9,7 +9,9 @@ export async function GET(request: Request) {
   try {
     const requestUrl = new URL(request.url);
     const code = requestUrl.searchParams.get('code');
+    const type = requestUrl.searchParams.get('type');
     console.log('Parsed code from callback URL:', code);
+    console.log('Parsed type from callback URL:', type);
     
     if (!code) {
       return NextResponse.redirect(
@@ -19,21 +21,48 @@ export async function GET(request: Request) {
 
     const supabase = await createClient();
 
-    // Exchange the code for a session
-    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
-    if (exchangeError) {
-      console.error('exchangeCodeForSession error:', exchangeError);
-      throw exchangeError;
-    }
-    console.log('exchangeCodeForSession succeeded');
-
-    // Get the user data
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    let user;
     
-    if (userError || !user) {
-      console.error('getUser error or no user:', userError);
-      throw userError || new Error('User not found');
+    // Handle different auth flows
+    if (type === 'signup' || type === 'recovery') {
+      // Email confirmation flow - use verifyOtp
+      const { data, error } = await supabase.auth.verifyOtp({
+        type: type as 'signup' | 'recovery',
+        token_hash: code
+      });
+      
+      if (error) {
+        console.error('verifyOtp error:', error);
+        throw error;
+      }
+      
+      user = data.user;
+      console.log('verifyOtp succeeded');
+    } else {
+      // OAuth flow - use exchangeCodeForSession
+      const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+      if (exchangeError) {
+        console.error('exchangeCodeForSession error:', exchangeError);
+        throw exchangeError;
+      }
+      console.log('exchangeCodeForSession succeeded');
+      
+      // Get the user data
+      const { data: { user: oauthUser }, error: userError } = await supabase.auth.getUser();
+      
+      if (userError || !oauthUser) {
+        console.error('getUser error or no user:', userError);
+        throw userError || new Error('User not found');
+      }
+      
+      user = oauthUser;
+      console.log('getUser succeeded:', { id: user.id, email: user.email });
     }
+
+    if (!user) {
+      throw new Error('No user found after authentication');
+    }
+
     console.log('getUser succeeded:', { id: user.id, email: user.email });
 
     // Check if user exists in the database
