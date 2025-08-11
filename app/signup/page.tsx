@@ -2,6 +2,7 @@ import { SignupForm } from "@/components/signup-form"
 import { signUp, redirectToPath } from "@/utils/auth-helpers/server"
 import Link from "next/link"
 import { Zap } from "lucide-react"
+import Script from "next/script"
 
 export default function SignupPage() {
   async function handleSignUp(formData: FormData) {
@@ -11,6 +12,12 @@ export default function SignupPage() {
   }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+      <Script 
+        src="https://www.reddimon.com/reddimon-tracker.js" 
+        async 
+        defer 
+        strategy="afterInteractive"
+      />
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center justify-center mb-4">

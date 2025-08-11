@@ -5,10 +5,17 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowRight, CheckCircle, Star, Zap, Shield, Users } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import Script from "next/script"
 
 export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
+      <Script 
+        src="https://www.reddimon.com/reddimon-tracker.js" 
+        async 
+        defer 
+        strategy="afterInteractive"
+      />
       {/* Header */}
       <header className="px-4 lg:px-6 h-14 flex items-center border-b">
         <Link className="flex items-center justify-center" href="#">
