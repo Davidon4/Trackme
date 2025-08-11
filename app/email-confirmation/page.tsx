@@ -7,7 +7,6 @@ import { getErrorRedirect, getStatusRedirect, getURL } from "@/utils/helpers";
 import { redirectToPath } from "@/utils/auth-helpers/server";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
-import Script from "next/script";
 
 type EmailConfirmationPageProps = {
   params: Promise<Record<string, string>>;
@@ -60,12 +59,6 @@ export default async function EmailConfirmationPage({ searchParams }: EmailConfi
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <Script 
-        src="https://www.reddimon.com/reddimon-tracker.js" 
-        async 
-        defer 
-        strategy="afterInteractive"
-      />
       <div className="w-full max-w-md">
         <Card>
           <CardHeader className="space-y-2">

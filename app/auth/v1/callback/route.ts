@@ -97,6 +97,12 @@ export async function GET(request: Request) {
       console.log('Inserted new user row');
     }
 
+    // For OAuth flows, redirect to dashboard with tracking restoration
+    if (!type || type !== 'signup') {
+      return NextResponse.redirect(new URL('/dashboard?oauth_success=true', baseUrl));
+    }
+
+    // For email confirmation, redirect to dashboard
     return NextResponse.redirect(new URL('/dashboard', baseUrl));
 
   } catch (error) {

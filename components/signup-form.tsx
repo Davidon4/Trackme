@@ -19,6 +19,15 @@ export function SignupForm({ onSignUp }: SignupFormProps) {
 
   const handleGoogleSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    
+    // Preserve tracking data before OAuth redirect
+    if (typeof window !== 'undefined' && window.Reddimon) {
+      const trackingData = window.Reddimon.getTrackingData();
+      if (trackingData.reddimon_link_id) {
+        sessionStorage.setItem('reddimon_temp', JSON.stringify(trackingData));
+      }
+    }
+    
     setIsLoading(true);
     try {
       await signInWithOAuth(e);
@@ -27,6 +36,15 @@ export function SignupForm({ onSignUp }: SignupFormProps) {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleEmailSignUp = async (formData: FormData) => {
+    // Track the conversion manually for email signup
+    if (typeof window !== 'undefined' && window.Reddimon) {
+      window.Reddimon.trackSignup();
+    }
+    
+    await onSignUp(formData);
   };
 
   return (
@@ -79,7 +97,7 @@ export function SignupForm({ onSignUp }: SignupFormProps) {
 
 
         {/* Signup Form */}
-        <form className="space-y-4" action={onSignUp}>
+        <form className="space-y-4" action={handleEmailSignUp}>
           <div className="space-y-2">
             <Label htmlFor="name">Full Name</Label>
             <div className="relative">
