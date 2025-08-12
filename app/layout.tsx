@@ -23,14 +23,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log('[Reddimon Debug] Root layout rendering');
+  
   return (
     <html lang="en">
       <head>
         <Script 
-          src="https://www.reddimon.com/reddimon-tracker.js" 
-          async 
-          defer 
+          src="https://track.reddimon.com/ki.js" 
           strategy="afterInteractive"
+          onLoad={() => console.log('[Reddimon Debug] Script loaded successfully')}
+          onError={(e) => console.error('[Reddimon Debug] Script failed to load:', e)}
         />
       </head>
       <body

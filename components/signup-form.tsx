@@ -20,12 +20,22 @@ export function SignupForm({ onSignUp }: SignupFormProps) {
   const handleGoogleSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     
+    console.log('[Reddimon Debug] Google signin clicked');
+    console.log('[Reddimon Debug] window.Reddimon available:', !!window.Reddimon);
+    
     // Preserve tracking data before OAuth redirect
     if (typeof window !== 'undefined' && window.Reddimon) {
       const trackingData = window.Reddimon.getTrackingData();
+      console.log('[Reddimon Debug] Tracking data before OAuth:', trackingData);
+      
       if (trackingData.reddimon_link_id) {
         sessionStorage.setItem('reddimon_temp', JSON.stringify(trackingData));
+        console.log('[Reddimon Debug] Saved tracking data to sessionStorage');
+      } else {
+        console.log('[Reddimon Debug] No reddimon_link_id found in tracking data');
       }
+    } else {
+      console.log('[Reddimon Debug] Reddimon not available or window undefined');
     }
     
     setIsLoading(true);
@@ -39,9 +49,20 @@ export function SignupForm({ onSignUp }: SignupFormProps) {
   };
 
   const handleEmailSignUp = async (formData: FormData) => {
+    console.log('[Reddimon Debug] Email signup form submitted');
+    console.log('[Reddimon Debug] window.Reddimon available:', !!window.Reddimon);
+    
     // Track the conversion manually for email signup
     if (typeof window !== 'undefined' && window.Reddimon) {
-      window.Reddimon.trackSignup();
+      console.log('[Reddimon Debug] Attempting to track email signup');
+      try {
+        const result = await window.Reddimon.trackSignup();
+        console.log('[Reddimon Debug] Email signup tracking result:', result);
+      } catch (error) {
+        console.error('[Reddimon Debug] Error tracking email signup:', error);
+      }
+    } else {
+      console.log('[Reddimon Debug] Reddimon not available for email signup tracking');
     }
     
     await onSignUp(formData);

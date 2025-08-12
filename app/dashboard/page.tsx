@@ -1,33 +1,8 @@
 "use client"
 
-import { useEffect } from 'react'
+
 
 export default function DashboardPage() {
-  useEffect(() => {
-    // Check if we're coming back from OAuth
-    const urlParams = new URLSearchParams(window.location.search);
-    const isOAuthReturn = urlParams.get('oauth_success') === 'true';
-    
-    if (isOAuthReturn) {
-      // Restore tracking data from sessionStorage
-      const tempTracking = sessionStorage.getItem('reddimon_temp');
-      if (tempTracking) {
-        const data = JSON.parse(tempTracking);
-        localStorage.setItem('reddimon_tracking_data', JSON.stringify({
-          ...data,
-          timestamp: Date.now()
-        }));
-        sessionStorage.removeItem('reddimon_temp');
-        
-        // Track the conversion
-        setTimeout(() => {
-          if (window.Reddimon) {
-            window.Reddimon.trackSignup();
-          }
-        }, 100);
-      }
-    }
-  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
