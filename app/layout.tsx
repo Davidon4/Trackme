@@ -31,8 +31,6 @@ export default function RootLayout({
         <Script 
           src="https://track.reddimon.com/ki.js" 
           strategy="afterInteractive"
-          onLoad={() => console.log('[Reddimon Debug] Script loaded successfully')}
-          onError={(e) => console.error('[Reddimon Debug] Script failed to load:', e)}
         />
       </head>
       <body
