@@ -23,7 +23,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  console.log('[Reddimon Debug] Root layout rendering');
   
   return (
     <html lang="en">
